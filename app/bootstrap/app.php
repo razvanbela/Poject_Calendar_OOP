@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Providers\AppServiceProvider;
+use App\Providers\ConfigSrviceProvider;
 use Dotenv\Exception\InvalidPathException;
 use League\Container\Container;
+use League\Container\ReflectionContainer;
 use League\Route\Router;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -13,18 +14,24 @@ session_start();
 
 /* Load environment variables */
 try {
-    $dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . "/../")->load();
+    $dotenv = Dotenv\Dotenv::createUnsafeImmutable(base_path())->load();
 } catch (InvalidPathException $exception) {
     die($exception->getMessage());
 }
 
-/* Container setup */
-$container = (new Container)->addServiceProvider(new AppServiceProvider());
+/* Container setup, Autowire and Servive Provider*/
+$container = (new Container)
+    ->delegate(new ReflectionContainer)
+    ->addServiceProvider(new ConfigSrviceProvider());
+
+foreach ($container->get('config')->get('app.providers') as $provider){
+    $container->addServiceProvider(new $provider);
+}
 
 /* Router setup */
 $router = $container->get(Router::class);
 
-require_once __DIR__ . '/../routes/web.php';
+require_once base_path('routes/web.php');
 
 $response = $router->dispatch($container->get('request'));
 
