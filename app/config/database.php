@@ -3,7 +3,7 @@
 return[
     'mysql'=>[
         'driver' => env('DB_DRIVER', 'pdo_mysql'),
-        'host' => env('DB_HOST', 'mysql'),
+        'host' => env('DB_HOST', 'localhost'),
         'dbname' => env('DB_DATABASE', 'tutorial'),
         'user' => env('DB_USERNAME', 'tutorial'),
         'password' => env('DB_PASSWORD', 'secret'),

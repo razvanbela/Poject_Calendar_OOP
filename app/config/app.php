@@ -5,7 +5,7 @@ use App\Middleware\ClearValidationErrors;
 use App\Middleware\CsrfGuard;
 use App\Middleware\ShareValidationErrors;
 use App\Middleware\ViewShareMiddleware;
-use App\Providers\{AppServiceProvider,
+use App\app\Providers\{AppServiceProvider,
     AuthServiceProvider,
     CsrfServiceProvider,
     DatabaseServiceProvider,

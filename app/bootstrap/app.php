@@ -7,9 +7,13 @@ use App\{Auth\Auth,
     Exceptions\Handler,
     Providers\ConfigServiceProvider,
     Session\SessionStore,
-    Views\View};
+    Views\View
+};
 use Dotenv\Exception\InvalidPathException;
-use League\{Container\Container, Container\ReflectionContainer, Route\Router};
+use League\{Container\Container,
+    Container\ReflectionContainer,
+    Route\Router
+};
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -50,7 +54,5 @@ try {
         $container->get(View::class),
     ))->respond();
 }
-
-ray($_SESSION, $container->get(Auth::class));
 
 $container->get('emitter')->emit($response);

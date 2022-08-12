@@ -29,4 +29,8 @@ class RouteExtension extends AbstractExtension
     {
         return $_SERVER['REQUEST_URI'] === $this->route($name);
     }
+
+    //public function asset(string $str){
+    //    return '/'.$str;
+    //}
 }
