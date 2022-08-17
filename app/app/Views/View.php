@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Views;
 
 use Laminas\Diactoros\Response;
@@ -19,9 +21,10 @@ class View
 
         return $response;
     }
-    public function share(array $data):void
+
+    public function share(array $data): void
     {
-        foreach ($data as $key =>$value){
+        foreach ($data as $key => $value) {
             $this->twig->addGlobal($key, $value);
         }
     }

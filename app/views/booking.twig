@@ -1,0 +1,34 @@
+{% extends 'templates/app.twig' %}
+
+{% block content %}
+  <div class="flex flex-col justify-center py-44 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Reservation</h2>
+    </div>
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <form class="space-y-6" action="{{ route('booking.store') }}" method="POST">
+        <input type="hidden" name="{{ constant('SESSION_KEY', csrf) }}" value="{{ csrf.token }}">
+        <div>
+          <label for="adress" class="block text-sm font-medium text-gray-700"> Adress </label>
+          <div class="mt-1">
+          <select name="adress" id="" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="data" class="block text-sm font-medium text-gray-700">Date</label>
+          <div class="mt-1">
+            <input type="date" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          </div>
+        </div>
+        <div>
+          <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Reserv</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,17 +1,20 @@
 <?php
 
-use App\Middleware\Authenticate;
+use App\Middleware\AuthenticateFromCookie;
+use App\Middleware\AuthenticateFromSession;
 use App\Middleware\ClearValidationErrors;
 use App\Middleware\CsrfGuard;
 use App\Middleware\ShareValidationErrors;
 use App\Middleware\ViewShareMiddleware;
-use App\app\Providers\{AppServiceProvider,
+use App\Providers\{AppServiceProvider,
     AuthServiceProvider,
+    CookieServiceProvider,
     CsrfServiceProvider,
     DatabaseServiceProvider,
     FlashServiceProvider,
     HashServiceProvider,
     SessionServiceProvider,
+    ValidationServiceProvider,
     ViewServiceProvider};
 
 return [
@@ -27,14 +30,17 @@ return [
         HashServiceProvider::class,
         AuthServiceProvider::class,
         FlashServiceProvider::class,
-        CsrfServiceProvider::class
+        CsrfServiceProvider::class,
+        ValidationServiceProvider::class,
+        CookieServiceProvider::class
     ],
 
     'middleware' => [
         ShareValidationErrors::class,
         ClearValidationErrors::class,
         ViewShareMiddleware::class,
-        Authenticate::class,
+        AuthenticateFromCookie::class,
+        AuthenticateFromSession::class,
         CsrfGuard::class
     ]
 ];

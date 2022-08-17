@@ -4,33 +4,22 @@ declare(strict_types=1);
 
 namespace App\Controllers\Auth;
 
-use App\{
-    Auth\Auth,
-    Auth\Hashing\Hasher,
-    Controllers\Controller,
-    Entities\User,
-    Session\Flash,
-    Views\View
-};
+use App\{Auth\Auth, Auth\Hashing\Hasher, Controllers\Controller, Entities\User, Session\Flash, Views\View};
 use Doctrine\ORM\EntityManager;
 use Laminas\Diactoros\Response;
 use League\Route\Router;
-use Psr\Http\Message\{
-    ResponseInterface,
-    ServerRequestInterface
-};
+use Psr\Http\Message\{ResponseInterface, ServerRequestInterface};
 
-class RegistrController extends Controller
+class RegisterController extends Controller
 {
     public function __construct(
-        protected View          $view,
-        protected Auth          $auth,
-        protected Router        $router,
-        protected Flash         $flash,
-        protected Hasher        $hash,
+        protected View $view,
+        protected Auth $auth,
+        protected Router $router,
+        protected Flash $flash,
+        protected Hasher $hash,
         protected EntityManager $db
-    )
-    {
+    ) {
     }
 
     public function index(): ResponseInterface

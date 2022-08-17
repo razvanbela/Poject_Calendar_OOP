@@ -32,13 +32,15 @@ abstract class BaseEntity
         return property_exists($this, $property);
     }
 
-    public function update(array $data):bool
+    public function update(array $data): bool
     {
-        foreach ($data as $key =>$value){
-            $this->{$key}=$value;
+        foreach ($data as $key => $value) {
+            $this->{$key} = $value;
         }
+
         return true;
     }
+
     public function fill(array $data): self
     {
         foreach ($data as $key => $value) {

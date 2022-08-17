@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use App\Exceptions\CsfrTokenException;
-use App\Security\Csfr;
+use App\Exceptions\CsrfTokenException;
+use App\Security\Csrf;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class CsfrGuard implements MiddlewareInterface
+class CsrfGuard implements MiddlewareInterface
 {
-    public function __construct(protected Csfr $csrf)
+    public function __construct(protected Csrf $csrf)
     {
     }
 
-    /** @throws CsfrTokenException */
+    /** @throws CsrfTokenException */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (!$this->requestRequiresProtection($request)) {
@@ -25,7 +25,7 @@ class CsfrGuard implements MiddlewareInterface
         }
 
         if (!$this->csrf->tokenIsValid($this->getTokenFromRequest($request))) {
-            throw new CsfrTokenException();
+            throw new CsrfTokenException();
         }
 
         return $handler->handle($request);

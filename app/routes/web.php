@@ -8,8 +8,11 @@ global $container;
 
 use App\Controllers\{Auth\LoginController,
     Auth\LogoutController,
-    Auth\RegistrController,
-    HomeController};
+    Auth\RegisterController,
+    BookingController,
+    LocationController,
+    HomeController
+};
 use App\Middleware\{Authenticated, Guest};
 use League\{Container\Container, Route\RouteGroup, Route\Router};
 
@@ -21,6 +24,12 @@ $router->group('', function (RouteGroup $router) {
 
     $router->post('/logout', [LogoutController::class, 'logout'])->setName('logout');
 
+    $router->get('/booking', [BookingController::class, 'index'])->setName('booking');
+
+    $router->post('/booking', [BookingController::class, 'store'])->setName('booking.store');
+
+    $router->get('/location', [LocationController::class, 'index'])->setName('location');
+
 })->middleware($container->get(Authenticated::class));
 
 // Routes that can be accessed only if the user is NOT authenticated
@@ -28,10 +37,10 @@ $router->group('', function (RouteGroup $router) {
 
     $router->get('/login', [LoginController::class, 'index'])->setName('login');
 
-    $router->post('/login', [LoginController::class, 'store']);
+    $router->post('/login', [LoginController::class, 'store'])->setName('login.store');
 
     $router->get('/register', [RegisterController::class, 'index'])->setName('register');
 
-    $router->post('/register', [RegisterController::class, 'store']);
+    $router->post('/register', [RegisterController::class, 'store'])->setName('register.store');
 
 })->middleware($container->get(Guest::class));

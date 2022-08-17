@@ -6,7 +6,7 @@ namespace App\Exceptions;
 
 use Exception;
 
-class CsfrTokenException extends Exception
+class CsrfTokenException extends Exception
 {
 
 }

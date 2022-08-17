@@ -6,7 +6,7 @@ namespace App\Security;
 
 use App\Session\SessionStore;
 
-class Csfr
+class Csrf
 {
     public const SESSION_KEY = '_token';
 

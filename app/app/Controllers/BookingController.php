@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Controllers\Auth;
+namespace App\Controllers;
 
 use App\Auth\Auth;
-use App\Controllers\Controller;
+
 use App\Session\Flash;
 use App\Views\View;
 use Laminas\Diactoros\Response;
@@ -13,8 +13,9 @@ use League\Route\Router;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class LoginController extends Controller
+class BookingController extends Controller
 {
+
     public function __construct(
         protected View $view,
         protected Auth $auth,
@@ -23,14 +24,13 @@ class LoginController extends Controller
     ) {
     }
 
-    public function index(): ResponseInterface
+    public function index(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->view->render(new Response, 'auth/login.twig');
+        return $this->view->render(new Response, 'booking.twig');
     }
-
-    public function store(ServerRequestInterface $request): ResponseInterface
+    /*  public function store(ServerRequestInterface $request): ResponseInterface
     {
-        $data = $this->validate($request, [
+      $data = $this->validate($request, [
             'email' => ['required', 'email'],
             'password' => ['required']
         ]);
@@ -44,5 +44,5 @@ class LoginController extends Controller
         }
 
         return redirect($this->router->getNamedRoute('home')->getPath());
-    }
+    }*/
 }

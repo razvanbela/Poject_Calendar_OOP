@@ -11,10 +11,11 @@ use Psr\Http\Message\ResponseInterface;
 
 class LogoutController extends Controller
 {
-   public function __construct(
-       protected Auth $auth,
-       protected Router $router,
-   ){}
+    public function __construct(
+        protected Auth $auth,
+        protected Router $router,
+    ) {
+    }
 
     public function logout(): ResponseInterface
     {

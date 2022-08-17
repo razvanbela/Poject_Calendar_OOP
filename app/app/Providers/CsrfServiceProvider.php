@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Security\Csfr;
+use App\Security\Csrf;
 use App\Session\SessionStore;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 
-class CsfrServiceProvider extends AbstractServiceProvider
+class CsrfServiceProvider extends AbstractServiceProvider
 {
     public function provides(string $id): bool
     {
-        $services = [Csfr::class];
+        $services = [Csrf::class];
 
         return in_array($id, $services);
     }
@@ -21,8 +21,8 @@ class CsfrServiceProvider extends AbstractServiceProvider
     {
         $container = $this->getContainer();
 
-        $container->addShared(Csfr::class, function () use ($container) {
-            return new Csfr(
+        $container->addShared(Csrf::class, function () use ($container) {
+            return new Csrf(
                 $container->get(SessionStore::class)
             );
         });

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Auth\Hashing;
 
-class BcryptHasher
+class BcryptHasher implements Hasher
 {
     public function create(string $plain): string
     {
