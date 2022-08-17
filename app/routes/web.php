@@ -10,7 +10,6 @@ use App\Controllers\{Auth\LoginController,
     Auth\LogoutController,
     Auth\RegisterController,
     BookingController,
-    LocationController,
     HomeController
 };
 use App\Middleware\{Authenticated, Guest};
@@ -27,8 +26,6 @@ $router->group('', function (RouteGroup $router) {
     $router->get('/booking', [BookingController::class, 'index'])->setName('booking');
 
     $router->post('/booking', [BookingController::class, 'store'])->setName('booking.store');
-
-    $router->get('/location', [LocationController::class, 'index'])->setName('location');
 
 })->middleware($container->get(Authenticated::class));
 

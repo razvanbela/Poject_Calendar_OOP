@@ -18,12 +18,15 @@ class Booking extends BaseEntity
     #[ORM\Id, ORM\GeneratedValue(strategy: 'AUTO')]
     protected int $id;
 
-    #[ORM\Column(name: 'data', type: Types::DATE_MUTABLE, nullable: false)]
-    protected string $data;
+    #[ORM\Column(name: 'date', type: Types::DATE_MUTABLE, nullable: false)]
+    protected string $date;
 
     #[ORM\Column(type: Types::INTEGER)]
     protected int $id_user;
 
     #[ORM\Column(type: Types::INTEGER)]
     protected int $id_location;
+
+    #[ORM\Column(name: 'time', type: Types::TIME_IMMUTABLE, nullable: false)]
+    protected string $time;
 }

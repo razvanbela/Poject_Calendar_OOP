@@ -1,10 +1,8 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\Entities;
-
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping AS ORM;
@@ -18,6 +16,6 @@ class Location extends BaseEntity
     #[ORM\Id, ORM\GeneratedValue(strategy: 'AUTO')]
     protected int $id;
 
-    #[ORM\Column(name: 'adress', type: Types::STRING, length: 255,nullable: false)]
-    protected string $data;
+    #[ORM\Column(name: 'address', type: Types::STRING, length: 255,nullable: false)]
+    protected string $address;
 }

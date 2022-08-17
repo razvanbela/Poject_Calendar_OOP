@@ -15,8 +15,4 @@ class LocationController
     {
     }
 
-    public function index(ServerRequestInterface $request): ResponseInterface
-    {
-        return $this->view->render(new Response, 'home.twig');
-    }
 }
