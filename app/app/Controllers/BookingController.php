@@ -24,8 +24,6 @@ class BookingController extends Controller
     public function __construct(
         protected View          $view,
         protected Auth          $auth,
-        protected Router        $router,
-        protected Flash         $flash,
         protected EntityManager $db
     )
     {
@@ -44,22 +42,21 @@ class BookingController extends Controller
 
         $this->createBooking($data);
 
-        return redirect($this->router->getNamedRoute('home')->getPath());
+        return $this->view->render(new Response, 'booking.twig');
     }
 
     protected function createBooking(array $data): Booking
     {
         $booking = new Booking();
 
-        $id_user = $this->db->getRepository(User::class)->find('id');
+        $location = $this->db->getRepository(Location::class)->find($data['location']);
 
-        $id_location = $this->db->getRepository(Location::class)->find('id');
+        $resDate = \DateTime::createFromFormat('Y-m-d', $data['date']);
 
         $booking->fill([
-            'date' => $data['date'],
-            'id_user' => $data[$id_user],
-            'id_location' => $data[$id_location],
-            'time' => $data['time']
+            'date' => $resDate,
+            'user' => $this->auth->user(),
+            'location' => $location
         ]);
 
         $this->db->persist($booking);
@@ -71,9 +68,8 @@ class BookingController extends Controller
     private function validateBooking(ServerRequestInterface $request): array
     {
         return $this->validate($request, [
-            'address' => ['required'],
-            'date' => ['required'],
-            'time' => ['required']
+            'location' => ['required'],
+            'date' => ['required']
         ]);
     }
 

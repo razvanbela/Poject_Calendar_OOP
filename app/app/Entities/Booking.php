@@ -19,14 +19,13 @@ class Booking extends BaseEntity
     protected int $id;
 
     #[ORM\Column(name: 'date', type: Types::DATE_MUTABLE, nullable: false)]
-    protected string $date;
+    protected \DateTime $date;
 
-    #[ORM\Column(type: Types::INTEGER)]
-    protected int $id_user;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'bookings')]
+    #[ORM\JoinColumn(name: 'id_user', referencedColumnName: 'id', nullable: false)]
+    protected User $user;
 
-    #[ORM\Column(type: Types::INTEGER)]
-    protected int $id_location;
-
-    #[ORM\Column(name: 'time', type: Types::TIME_IMMUTABLE, nullable: false)]
-    protected string $time;
+    #[ORM\ManyToOne(targetEntity: Location::class, inversedBy: 'bookings')]
+    #[ORM\JoinColumn(name: 'id_location',referencedColumnName: 'id',nullable: false)]
+    protected Location $location;
 }
