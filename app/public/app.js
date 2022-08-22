@@ -14,9 +14,9 @@ const readCalendar = () => {
     }
     for (let j = 1; j <= lastDay; j++) {
         if (j === new Date().getDate() && date.getMonth() === new Date().getMonth() && date.getFullYear() === new Date().getFullYear()) {
-            days += `<div onclick='getDate()' data-date=" ${createDate(date.getFullYear(), date.getMonth() + 1, j)} " class="today" onclick="getDate()">${j}</div>`;
+            days += `<div data-date=" ${createDate(date.getFullYear(), date.getMonth() + 1, j)} " class="today" onclick="getDate()">${j}</div>`;
         } else {
-            days += `<div onclick='getDate()' data-date=" ${createDate(date.getFullYear(), date.getMonth() + 1, j)} "  class="days" onclick="getDate()">${j}</div>`;
+            days += `<div data-date=" ${createDate(date.getFullYear(), date.getMonth() + 1, j)} "  class="days" onclick="getDate()">${j}</div>`;
         }
     }
     monthDays.innerHTML = days;
@@ -46,14 +46,14 @@ function createDate(year, month, day) {
 let resDate =createDate(date.getFullYear(),date.getMonth()+1,date.getDay())
 
 function getDate() {
-    document.querySelector('.days').forEach(item => {
+    document.querySelector('.days').forEach( item => {
         item.addEventListener('click', () => {
             reservDate = item.getAttribute('data-date');
 
             let params = new FormData();
             params.append('resDate', reservDate);
             console.log(params.getAll('resDate'));
-            axios.post('booking', params).then(response => {
+            axios.post('bookings', params).then(response => {
                 console.log(response);
             });
         })

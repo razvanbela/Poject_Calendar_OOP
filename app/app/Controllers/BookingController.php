@@ -24,6 +24,7 @@ class BookingController extends Controller
     public function __construct(
         protected View          $view,
         protected Auth          $auth,
+        protected Router        $router,
         protected EntityManager $db
     )
     {
@@ -40,9 +41,13 @@ class BookingController extends Controller
     {
         $data = $this->validateBooking($request);
 
+        $this->validateDate($data);
+
+        $this->validateLocation($data);
+
         $this->createBooking($data);
 
-        return $this->view->render(new Response, 'booking.twig');
+        return redirect($this->router->getNamedRoute('booking')->getPath());
     }
 
     protected function createBooking(array $data): Booking
@@ -67,11 +72,29 @@ class BookingController extends Controller
 
     private function validateBooking(ServerRequestInterface $request): array
     {
-        dd($request);
+
         return $this->validate($request, [
             'date' => ['required'],
             'location' => ['required']
         ]);
     }
 
+    private function validateDate(array $data)
+    {
+        $resDate = new \DateTime;
+        $resDate = $resDate->format('Y-m-d');
+
+         if ($resDate <= $data['date']) {
+         dd('Nu se poate');
+        }
+        dd('da');
+    }
+
+    private function validateLocation(array $data)
+    {
+        $resDate = \DateTime::createFromFormat('Y-m-d', $data['date']);
+        $location = $this->db->getRepository(Location::class)->find($data['location']);
+
+        //dd($resDate, $location);
+    }
 }
