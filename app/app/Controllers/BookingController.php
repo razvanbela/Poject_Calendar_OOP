@@ -67,9 +67,10 @@ class BookingController extends Controller
 
     private function validateBooking(ServerRequestInterface $request): array
     {
+        dd($request);
         return $this->validate($request, [
-            'location' => ['required'],
-            'date' => ['required']
+            'date' => ['required'],
+            'location' => ['required']
         ]);
     }
 
