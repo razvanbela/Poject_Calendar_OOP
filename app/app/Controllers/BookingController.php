@@ -41,11 +41,11 @@ class BookingController extends Controller
     {
         $data = $this->validateBooking($request);
 
-        $this->validateDate($data);
+       if( $this->validateDate($data) ){
+           $this->createBooking($data);
+       }
 
-        $this->validateLocation($data);
-
-        $this->createBooking($data);
+       $this->validateLocation($data);
 
         return redirect($this->router->getNamedRoute('booking')->getPath());
     }
@@ -84,17 +84,26 @@ class BookingController extends Controller
         $resDate = new \DateTime;
         $resDate = $resDate->format('Y-m-d');
 
-         if ($resDate <= $data['date']) {
-         dd('Nu se poate');
+        if ($resDate > $data['date']) {
+//         dd('Nu se poate',$resDate,$data['date']);
+            return false;
         }
-        dd('da');
+//        dd('da');
+        return true;
     }
 
     private function validateLocation(array $data)
     {
         $resDate = \DateTime::createFromFormat('Y-m-d', $data['date']);
         $location = $this->db->getRepository(Location::class)->find($data['location']);
+//        $bookings = $this->db->getRepository(Booking::class)->findBy(array('date' => $resDate, 'location' => $location), array('id' => 'ASC'));
+        $booking = $this->db->getRepository(Booking::class)->find($data['location']);
 
-        //dd($resDate, $location);
+        if ($resDate == $booking->date || $location == $booking->location) {
+//            dd($resDate, $booking->data, $booking->location);
+            return false;
+        }
+//        dd($resDate, $location, $booking, $data['location'], $data['date']);
+        return true;
     }
 }

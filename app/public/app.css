@@ -3,7 +3,8 @@
     padding: 0;
     box-sizing: border-box;
 }
-body{
+
+body {
     background: #326789;
 }
 
@@ -15,6 +16,7 @@ body{
     align-items: center;
 
 }
+
 .calendar {
     width: 31rem;
     height: 31.5rem;
@@ -69,7 +71,7 @@ body{
     flex-wrap: wrap;
     padding: 0.2rem;
     display: grid;
-    grid-template-columns: repeat(7,1fr);
+    grid-template-columns: repeat(7, 1fr);
 }
 
 .days div {
