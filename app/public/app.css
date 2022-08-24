@@ -96,3 +96,9 @@ body {
 
     background-color: #e65c4f;
 }
+.reservation {
+    width: 27rem;
+    height: 31.5rem;
+    background-color: #78a6c8;
+    margin: 0 3rem;
+}

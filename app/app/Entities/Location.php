@@ -18,4 +18,7 @@ class Location extends BaseEntity
 
     #[ORM\Column(name: 'address', type: Types::STRING, length: 255,nullable: false)]
     protected string $address;
+
+    #[ORM\Column(name: 'rooms', type: Types::INTEGER,nullable: false)]
+    protected string $rooms;
 }

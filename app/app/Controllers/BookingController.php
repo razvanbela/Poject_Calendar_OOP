@@ -29,7 +29,6 @@ class BookingController extends Controller
     )
     {
     }
-
     public function index(ServerRequestInterface $request): ResponseInterface
     {
         $locations = $this->db->getRepository(Location::class)->findAll();
@@ -41,12 +40,12 @@ class BookingController extends Controller
     {
         $data = $this->validateBooking($request);
 
-       if( $this->validateDate($data) ){
-           $this->createBooking($data);
-       }
+        if ($this->validateDate($data) && $this->validateLocation($data)) {
 
-       $this->validateLocation($data);
+            $this->createBooking($data);
 
+            return redirect($this->router->getNamedRoute('home')->getPath());
+        }
         return redirect($this->router->getNamedRoute('booking')->getPath());
     }
 
@@ -72,7 +71,6 @@ class BookingController extends Controller
 
     private function validateBooking(ServerRequestInterface $request): array
     {
-
         return $this->validate($request, [
             'date' => ['required'],
             'location' => ['required']
@@ -81,29 +79,32 @@ class BookingController extends Controller
 
     private function validateDate(array $data)
     {
-        $resDate = new \DateTime;
-        $resDate = $resDate->format('Y-m-d');
-
-        if ($resDate > $data['date']) {
-//         dd('Nu se poate',$resDate,$data['date']);
+        $currentDate = new \DateTime;
+        $currentDate = $currentDate->format('Y-m-d');
+        $location = $this->db->getRepository(Location::class)->find($data['location']);
+        $reservedDate = $this->db->getRepository(Booking::class)->count(
+            [
+                'user'=> $this->auth->user(),
+                'date' => \DateTime::createFromFormat('Y-m-d',$data['date']),
+                'location'=> $location
+            ]
+        );
+        if ($currentDate > $data['date'] || $reservedDate == 1) {
             return false;
         }
-//        dd('da');
         return true;
     }
 
     private function validateLocation(array $data)
     {
-        $resDate = \DateTime::createFromFormat('Y-m-d', $data['date']);
         $location = $this->db->getRepository(Location::class)->find($data['location']);
-//        $bookings = $this->db->getRepository(Booking::class)->findBy(array('date' => $resDate, 'location' => $location), array('id' => 'ASC'));
-        $booking = $this->db->getRepository(Booking::class)->find($data['location']);
-
-        if ($resDate == $booking->date || $location == $booking->location) {
-//            dd($resDate, $booking->data, $booking->location);
-            return false;
+        $occupiedRooms = $this->db->getRepository(Booking::class)->count([
+            'date'=>\DateTime::createFromFormat('Y-m-d',$data['date']),
+            'location'=> $location,
+        ]);
+        if ($location->rooms >= $occupiedRooms) {
+            return true;
         }
-//        dd($resDate, $location, $booking, $data['location'], $data['date']);
-        return true;
+        return false;
     }
 }

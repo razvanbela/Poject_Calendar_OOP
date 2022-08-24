@@ -24,6 +24,14 @@
             <div class="days">
             </div>
         </div>
+        <div class="reservation">
+            <h1>Bookings</h1>
+
+            {% for booking in bookings %}
+            <div >{{ booking.user.name }}  {{ booking.location.address }}</div>
+            {% endfor %}
+        </div>
     </div>
+
 
 {% endblock %}
