@@ -16,9 +16,9 @@ const readCalendar = () => {
     }
     for (let j = 1; j <= lastDay; j++) {
         if (j === new Date().getDate() && date.getMonth() === new Date().getMonth() && date.getFullYear() === new Date().getFullYear()) {
-            days += `<div  data-date=" ${createDate(date.getFullYear(), date.getMonth() + 1, j)} " class="today days">${j}</div>`;
+            days += `<div   data-date=" ${createDate(date.getFullYear(), date.getMonth() + 1, j)} " class="today day" >${j}</div>`;
         } else {
-            days += `<div  data-date=" ${createDate(date.getFullYear(), date.getMonth() + 1, j)} "  class="days" >${j}</div>`;
+            days += `<div   data-date=" ${createDate(date.getFullYear(), date.getMonth() + 1, j)} "  class="day" >${j}</div>`;
         }
     }
     monthDays.innerHTML = days;
@@ -28,17 +28,16 @@ document.querySelector(".next").addEventListener('click', () => {
     date.setMonth(date.getMonth() + 1);
     readCalendar();
     sendDate();
-
 });
 document.querySelector(".prev").addEventListener('click', () => {
     date.setMonth(date.getMonth() - 1);
     readCalendar();
     sendDate();
-
 });
 
 readCalendar();
 sendDate();
+
 
 function createDate(year, month, day) {
     if (month < 10) {
@@ -50,23 +49,42 @@ function createDate(year, month, day) {
     return year + "-" + month + "-" + day;
 }
 
+
 let bookDate = createDate(date.getFullYear(), date.getMonth(), date.getDate());
 
 function sendDate() {
-    document.querySelectorAll('.days').forEach(item => {
+    document.querySelectorAll('.day').forEach(item => {
         item.addEventListener('click', () => {
             bookDate = item.getAttribute('data-date');
-
-            let params = new FormData();
-
-            params.append('bookDate', bookDate);
-            document.querySelector('.reservation h1').innerHTML = 'Bookings for ' + bookDate.toString();
-            console.log(params.getAll('bookDate'));
-            axios.post('home', params).then(response => {
-                // console.log(response);
-            })
+            sendParamsGet(bookDate.toString());
         })
-    });
+    })
 }
 
+function sendParamsGet(dateParam) {
+
+    axios({
+        method: 'get',
+        url: '/bookings',
+        params: {
+            date: dateParam,
+        }
+    }).then(function (response) {
+        console.log(response,dateParam);
+    //     showBookings(response.data,dateParam);
+    })
+}
+
+function showBookings(bookings, date){
+
+    if(bookings.length === 0){
+        document.getElementById('bookings').innerHTML="No bookings"
+    }else{
+        for(let booking in bookings){
+            document.getElementById('bookings').innerHTML +=
+
+              '  <div class="booking"> <p class="name">${booking.name}</p> <p class="location">${booking.location}</p> </div>'
+        }
+    }
+}
 

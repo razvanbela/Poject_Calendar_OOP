@@ -11,6 +11,7 @@ use App\Views\View;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use Laminas\Diactoros\Response;
+use mysql_xdevapi\DatabaseObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -25,15 +26,30 @@ class HomeController
 
     public function index(ServerRequestInterface $request): ResponseInterface
     {
-        $getParams = $request->getQueryParams();
-//      dd($getParams);
-//
-//        $data = $getParams['bookDate'];
-//        $bookings = $this->db->getRepository(Booking::class)->matching(
-//            Criteria::create()->where(Criteria::expr()->eq('bookDate', \DateTime::createFromFormat('Y-m-d', $data))->getValues()
-//            )
-//        );
-        $bookings = $this->db->getRepository(Booking::class)->findAll();
-        return $this->view->render(new Response, 'home.twig', ['bookings' => $bookings]);
+        return $this->view->render(new Response, 'home.twig');
+    }
+
+    private function prepareForJson(array $bookings): array
+    {
+        $data = [];
+        foreach ($bookings as $booking) {
+            $data[] = [
+                "id" => $booking->id,
+                "name" => $booking->user->name,
+                "date" => $booking->date,
+                "location" => $booking->location,
+            ];
+        }
+        return $data;
+    }
+
+    public function getBookings(ServerRequestInterface $request): ResponseInterface
+    {
+        $date = $request->getQueryParams()['date'] ?? date('Y-m-d');
+dd(\DateTime::createFromFormat('Y-m-d', $date));
+        $bookings = $this->db->getRepository(Booking::class)->findBy([
+            'date' => \DateTime::createFromFormat('Y-m-d', $date)
+        ]);
+        return new Response\JsonResponse($this->prepareForJson($bookings));
     }
 }

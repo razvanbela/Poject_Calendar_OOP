@@ -25,10 +25,12 @@ class BookingController extends Controller
         protected View          $view,
         protected Auth          $auth,
         protected Router        $router,
+        protected Flash         $flash,
         protected EntityManager $db
     )
     {
     }
+
     public function index(ServerRequestInterface $request): ResponseInterface
     {
         $locations = $this->db->getRepository(Location::class)->findAll();
@@ -79,19 +81,25 @@ class BookingController extends Controller
 
     private function validateDate(array $data)
     {
-        $currentDate = new \DateTime;
-        $currentDate = $currentDate->format('Y-m-d');
+        $today = new \DateTime;
+        $today = $today->format('Y-m-d');
         $location = $this->db->getRepository(Location::class)->find($data['location']);
         $reservedDate = $this->db->getRepository(Booking::class)->count(
             [
-                'user'=> $this->auth->user(),
-                'date' => \DateTime::createFromFormat('Y-m-d',$data['date']),
-                'location'=> $location
+                'date' => \DateTime::createFromFormat('Y-m-d', $data['date']),
+                'user' => $this->auth->user(),
+                'location' => $location
             ]
         );
-        if ($currentDate > $data['date'] || $reservedDate == 1) {
+
+        if ($today > $data['date']) {
+            $this->flash->now('error', 'Can t choose a date older than today' );
+            return false;
+        } elseif ($reservedDate > 0) {
+            $this->flash->now('error', 'You already have a reservation on this date');
             return false;
         }
+
         return true;
     }
 
@@ -99,12 +107,14 @@ class BookingController extends Controller
     {
         $location = $this->db->getRepository(Location::class)->find($data['location']);
         $occupiedRooms = $this->db->getRepository(Booking::class)->count([
-            'date'=>\DateTime::createFromFormat('Y-m-d',$data['date']),
-            'location'=> $location,
+            'date' => \DateTime::createFromFormat('Y-m-d', $data['date']),
+            'location' => $location,
         ]);
-        if ($location->rooms >= $occupiedRooms) {
-            return true;
+        if ($location->rooms < $occupiedRooms) {
+            $this->flash->now('error','No available rooms left');
+            return false;
         }
-        return false;
+
+        return true;
     }
 }

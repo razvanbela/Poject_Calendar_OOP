@@ -21,6 +21,8 @@ $router->group('', function (RouteGroup $router) {
 
     $router->get('/', [HomeController::class, 'index'])->setName('home');
 
+    $router->get('/bookings', [HomeController::class, 'getBookings'])->setName('bookings');
+
     $router->post('/logout', [LogoutController::class, 'logout'])->setName('logout');
 
     $router->get('/booking', [BookingController::class, 'index'])->setName('booking');
